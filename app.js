@@ -8,15 +8,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+const v1 = '/api/v1/cms';
+
 // Routers
 const categoriesRouter = require('./app/api/v1/categories/router');
+
+app.use(v1, categoriesRouter);
 
 // Middlewares
 const notFoundMiddleWare = require('./app/middleware/not-found');
 const errorHandlerMiddleWare = require('./app/middleware/error-handler');
 
-const v1 = '/api/v1/cms';
-app.use(v1, categoriesRouter);
 app.use(notFoundMiddleWare);
 app.use(errorHandlerMiddleWare);
 
