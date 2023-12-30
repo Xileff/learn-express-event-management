@@ -21,6 +21,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = 400;
   }
 
+  // gagal casting, misalnya _id melebihi 100 digit atau semacamnya
   if (err.name === 'CastError') {
     customError.msg = `No item found with id : ${err.value}`;
     customError.statusCode = 404;

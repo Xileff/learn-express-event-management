@@ -1,10 +1,17 @@
-const Categories = require('./model');
-const { getAllCategories, createCategory, getOneCategory } = require('../../../services/mongoose/categories');
+const { StatusCodes } = require('http-status-codes');
+const {
+  getAllCategories,
+  createCategory,
+  getOneCategory,
+  updateCategory,
+  deleteCategory,
+} = require('../../../services/mongoose/categories');
 
 const create = async (req, res, next) => {
   try {
     const result = await createCategory(req);
-    return res.status(201).json({
+    console.log('test nodemon');
+    return res.status(StatusCodes.CREATED).json({
       status: 'success',
       data: result,
     });
@@ -16,7 +23,7 @@ const create = async (req, res, next) => {
 const index = async (req, res, next) => {
   try {
     const result = await getAllCategories();
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       status: 'success',
       data: result,
     });
@@ -28,7 +35,7 @@ const index = async (req, res, next) => {
 const find = async (req, res, next) => {
   try {
     const result = await getOneCategory(req);
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       status: 'success',
       data: result,
     });
@@ -39,16 +46,8 @@ const find = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
-
-    const result = await Categories.findByIdAndUpdate(
-      id,
-      { name },
-      { new: true, runValidators: true },
-    );
-
-    return res.status(200).json({
+    const result = await updateCategory(req);
+    return res.status(StatusCodes.OK).json({
       status: 'success',
       data: result,
     });
@@ -59,9 +58,8 @@ const update = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Categories.findByIdAndDelete(id);
-    return res.status(200).json({
+    const result = await deleteCategory(req);
+    return res.status(StatusCodes.OK).json({
       status: 'success',
       data: result,
     });

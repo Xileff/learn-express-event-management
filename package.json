@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
+    "dev": "nodemon --watch . --exec 'node ./bin/www'",
     "lint": "eslint ."
   },
   "dependencies": {
