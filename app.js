@@ -13,9 +13,11 @@ const v1 = '/api/v1/cms';
 // Routers
 const categoriesRouter = require('./app/api/v1/categories/router');
 const imagesRouter = require('./app/api/v1/images/router');
+const talentsRouter = require('./app/api/v1/talents/router');
 
 app.use(v1, categoriesRouter);
 app.use(v1, imagesRouter);
+app.use(v1, talentsRouter);
 
 // Middlewares
 const notFoundMiddleWare = require('./app/middleware/not-found');
