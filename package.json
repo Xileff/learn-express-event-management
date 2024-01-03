@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon --watch . --exec 'node ./bin/www'",
+    "dev": "nodemon ./bin/www",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -14,7 +14,8 @@
     "express": "~4.16.1",
     "http-status-codes": "^2.3.0",
     "mongoose": "^8.0.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "eslint": "^8.56.0",

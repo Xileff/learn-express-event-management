@@ -10,7 +10,6 @@ const {
 const create = async (req, res, next) => {
   try {
     const result = await createCategory(req);
-    console.log('test nodemon');
     return res.status(StatusCodes.CREATED).json({
       status: 'success',
       data: result,
