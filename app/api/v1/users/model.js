@@ -44,6 +44,8 @@ userSchema.pre('save', async function hashify(next) {
 
 userSchema.methods.comparePassword = async function comparify(candidatePassword) {
   const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  // candidatePassword -< password yg dimasukin pas login
+  // this.password -> password yg bener dari db
   return isMatch;
 };
 
