@@ -50,10 +50,16 @@ const deleteCategory = async (req) => {
   return result;
 };
 
+const checkCategory = async (id) => {
+  const result = await Categories.exists({ _id: id });
+  if (!result) throw new NotFoundError(`Category with id ${id} not found`);
+};
+
 module.exports = {
   getAllCategories,
   createCategory,
   getOneCategory,
   updateCategory,
   deleteCategory,
+  checkCategory,
 };

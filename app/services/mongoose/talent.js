@@ -79,10 +79,16 @@ const deleteTalent = async (req) => {
   return result;
 };
 
+const checkTalent = async (id) => {
+  const result = await Talents.exists({ _id: id });
+  if (!result) throw new NotFoundError(`Talent with id : ${id} not found`);
+};
+
 module.exports = {
   createTalent,
   getAllTalents,
   getOneTalent,
   updateTalent,
   deleteTalent,
+  checkTalent,
 };
