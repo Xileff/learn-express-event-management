@@ -32,6 +32,26 @@ const createOrganizer = async (req) => {
   return user;
 };
 
-module.exports = {
-  createOrganizer,
+const createUser = async (req) => {
+  const {
+    name, password, role, confirmPassword, email,
+  } = req.body;
+
+  if (password !== confirmPassword) {
+    throw new BadRequestError('Passwords do not match');
+  }
+
+  const user = await Users.create({
+    name,
+    email,
+    organizer: req.user.organizer,
+    password,
+    role,
+  });
+
+  delete user._doc.password;
+
+  return user;
 };
+
+module.exports = { createOrganizer, createUser };
