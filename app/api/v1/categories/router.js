@@ -4,11 +4,13 @@ const router = express();
 const {
   create, index, find, update, destroy,
 } = require('./controller');
+const { authenticateUser } = require('../../../middleware/auth');
 
-router.get('/categories', index);
-router.get('/categories/:id', find);
-router.post('/categories', create);
-router.put('/categories/:id', update);
-router.delete('/categories/:id', destroy);
+// req akan masuk ke middleware dulu sebelum ke controller
+router.get('/categories', authenticateUser, index);
+router.get('/categories/:id', authenticateUser, find);
+router.post('/categories', authenticateUser, create);
+router.put('/categories/:id', authenticateUser, update);
+router.delete('/categories/:id', authenticateUser, destroy);
 
 module.exports = router;

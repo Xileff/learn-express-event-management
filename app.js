@@ -25,7 +25,7 @@ app.use(v1, eventsRouter);
 app.use(v1, organizersRouter);
 app.use(v1, authCMSRouter);
 
-// Middlewares
+// Middlewares to catch error before sending response
 const notFoundMiddleWare = require('./app/middleware/not-found');
 const errorHandlerMiddleWare = require('./app/middleware/error-handler');
 

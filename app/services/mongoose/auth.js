@@ -23,4 +23,4 @@ const signin = async (req) => {
 
 module.exports = { signin };
 
-// yg penting buat jwt ada di sini dan utils : createUserPayload, jwt index
+// yg penting buat jwt ada di sini dan utils/createUserPayload, utils/jwt, middleware/jwt
