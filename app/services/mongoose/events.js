@@ -18,6 +18,7 @@ const createEvent = async (req) => {
     category,
     talent,
   } = req.body;
+  const { organizer } = req.user;
 
   await checkImage(image);
   await checkCategory(category);
@@ -38,6 +39,7 @@ const createEvent = async (req) => {
     image,
     category,
     talent,
+    organizer,
   });
 
   return result;
@@ -45,7 +47,8 @@ const createEvent = async (req) => {
 
 const getAllEvents = async (req) => {
   const { keyword, category, talent } = req.query;
-  let conditions = {};
+  const { organizer } = req.user;
+  let conditions = { organizer };
 
   if (keyword) {
     conditions = { ...conditions, title: { $regex: keyword, $options: 'i' } };
@@ -76,8 +79,9 @@ const getAllEvents = async (req) => {
 
 const getOneEvent = async (req) => {
   const { id } = req.params;
+  const { organizer } = req.user;
 
-  const result = await Events.findById(id)
+  const result = await Events.findOne({ _id: id, organizer })
     .populate({ path: 'image', select: '_id name' })
     .populate({ path: 'category', select: '_id name' })
     .populate({
@@ -96,6 +100,7 @@ const getOneEvent = async (req) => {
 
 const updateEvent = async (req) => {
   const { id } = req.params;
+  const { organizer } = req.user;
   const {
     title,
     date,
@@ -117,8 +122,8 @@ const updateEvent = async (req) => {
   const isTitleExists = await Events.findOne({ _id: { $ne: id }, title });
   if (isTitleExists) throw new BadRequestError(`Event with title : ${title} already exists`);
 
-  const result = await Events.findByIdAndUpdate(
-    id,
+  const result = await Events.findOneAndUpdate(
+    { _id: id, organizer },
     {
       title,
       date,
@@ -131,6 +136,7 @@ const updateEvent = async (req) => {
       image,
       category,
       talent,
+      organizer,
     },
     { new: true, runValidators: true },
   );
@@ -142,12 +148,27 @@ const updateEvent = async (req) => {
 
 const deleteEvent = async (req) => {
   const { id } = req.params;
+  const { organizer } = req.user;
 
-  const result = await Events.findByIdAndDelete(id);
+  const result = await Events.findOneAndDelete({ _id: id, organizer });
 
   if (!result) throw new NotFoundError(`Event with id : ${id} not found`);
 
   return result;
+};
+
+const changeStatus = async (req) => {
+  const { id } = req.params;
+  const { organizer } = req.user;
+  const { status } = req.body;
+
+  const event = await Events.findOne({ _id: id, organizer });
+  if (!event) throw new NotFoundError(`Event with id : ${id} not found`);
+
+  event.status = status;
+  await event.save();
+
+  return event;
 };
 
 module.exports = {
@@ -156,4 +177,5 @@ module.exports = {
   getOneEvent,
   updateEvent,
   deleteEvent,
+  changeStatus,
 };
