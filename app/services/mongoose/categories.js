@@ -5,7 +5,7 @@ const createCategory = async (req) => {
   const { organizer } = req.user;
   const { name } = req.body;
 
-  const isDuplicate = await Categories.exists({ name });
+  const isDuplicate = await Categories.exists({ name, organizer });
   if (isDuplicate) throw new BadRequestError('duplicate category name');
   // error dithrow di sini (service), kemudian alurnya spt di bawah
   // dilempar ke controller -> routes -> app -> diintervensi middleware
@@ -34,7 +34,7 @@ const updateCategory = async (req) => {
   const { organizer } = req.user;
 
   // Cari apakah nama sudah terpakai data lain (dengan id beda)
-  const isNameExists = await Categories.exists({ _id: { $ne: id }, name });
+  const isNameExists = await Categories.exists({ _id: { $ne: id }, name, organizer });
   if (isNameExists) throw new BadRequestError(`Category with name ${name} already exists.`);
 
   const result = await Categories.findOneAndUpdate(

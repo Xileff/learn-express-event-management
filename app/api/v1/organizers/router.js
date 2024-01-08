@@ -4,7 +4,7 @@ const { authenticateUser, authorizeRoles } = require('../../../middleware/auth')
 
 const router = express();
 
-router.post('/organizers', createCMSOrganizer);
+router.post('/organizers', authenticateUser, authorizeRoles('owner'), createCMSOrganizer);
 router.post('/users', authenticateUser, authorizeRoles('organizer'), createCMSUser);
 
 module.exports = router;
