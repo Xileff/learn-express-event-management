@@ -46,7 +46,7 @@ const createEvent = async (req) => {
 };
 
 const getAllEvents = async (req) => {
-  const { keyword, category, talent } = req.query;
+  const { keyword, category, talent, status } = req.query;
   const { organizer } = req.user;
   let conditions = { organizer };
 
@@ -60,6 +60,10 @@ const getAllEvents = async (req) => {
 
   if (talent) {
     conditions = { ...conditions, talent };
+  }
+
+  if (status) {
+    conditions = { ...conditions, status };
   }
 
   const result = await Events.find(conditions)
