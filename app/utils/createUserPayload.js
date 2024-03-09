@@ -6,4 +6,12 @@ const createUserPayload = (user) => ({
   organizer: user.organizer,
 });
 
-module.exports = createUserPayload;
+const createParticipantPayload = (participant) => ({
+  participantId: participant._id,
+  firstName: participant.firstName,
+  lastName: participant.lastName,
+  email: participant.email,
+  role: 'participant',
+});
+
+module.exports = { createUserPayload, createParticipantPayload };

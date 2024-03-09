@@ -40,4 +40,33 @@ const authorizeRoles = (...roles) => (req, res, next) => {
   next();
 };
 
-module.exports = { authenticateUser, authorizeRoles };
+const authenticateParticipant = (req, res, next) => {
+  try {
+    let token;
+    const authHeader = req.headers.authorization;
+
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      token = authHeader.split(' ')[1];
+    }
+
+    if (!token) {
+      throw new UnauthenticatedError('Authentication invalid');
+    }
+
+    const payload = isTokenValid({ token });
+
+    req.participant = {
+      id: payload.participantId,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      email: payload.email,
+      role: payload.role,
+    }
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = { authenticateUser, authorizeRoles, authenticateParticipant };
