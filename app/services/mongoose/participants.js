@@ -1,5 +1,7 @@
 const Participant = require('../../api/v1/participants/model');
 const Events = require('../../api/v1/events/model');
+const Payments = require('../../api/v1/payments/model');
+const Orders = require('../../api/v1/orders/model');
 const {
   BadRequestError,
   NotFoundError,
@@ -114,7 +116,62 @@ const getOneEvent = async (req) => {
 }
 
 const getAllOrders = async (req) => {
-  const result = await Events.findOne({ _id: req.participant.id });
+  const result = await Orders.find({ participant: req.participant.id });
+  return result;
+};
+
+const checkoutOrder = async (req) => {
+  const { event, personalDetail, payment, tickets } = req.body;
+
+  const checkEvent = await Events.findOne({ _id: event });
+  if (!checkEvent) throw new NotFoundError(`Event with id ${id} not found.`);
+
+  const checkPayment = await Payments.findOne({ _id: payment });
+  if (!checkPayment) throw new NotFoundError(`No payment method with id ${payment}.`);
+
+  let totalPay, totalOrderTicket = 0;
+  await tickets.forEach((ticket) => {
+    checkEvent.tickets.forEach((eventTicket) => {
+      if (ticket.ticketCategory.type === eventTicket.type) {
+        if (ticket.sumTicket > eventTicket.stock) {
+          throw new NotFoundError('Insufficient stock.');
+        } else {
+          eventTicket.stock -= ticket.sumTicket;
+          totalOrderTicket += ticket.sumTicket;
+          totalPay = ticket.ticketCategory.price * ticket.sumTicket;
+        }
+      }
+    });
+  });
+
+  await checkEvent.save();
+
+  const historyEvent = {
+    title: checkEvent.title,
+    date: checkEvent.date,
+    about: checkEvent.about,
+    tagline: checkEvent.tagline,
+    keyPoint: checkEvent.keyPoint,
+    venueName: checkEvent.venueName,
+    tickets,
+    image: checkEvent.image,
+    category: checkEvent.category,
+    talent: checkEvent.talent,
+    organizer: checkEvent.organizer,
+  };
+
+  const result = await Orders.create({
+    date: new Date(),
+    personalDetail,
+    totalPay,
+    totalOrderTicket,
+    orderItems: tickets,
+    participant: req.participant.id,
+    event,
+    historyEvent,
+    payment,
+  });
+
   return result;
 };
 
@@ -125,4 +182,5 @@ module.exports = {
   getAllEvents,
   getOneEvent,
   getAllOrders,
+  checkoutOrder,
 };
