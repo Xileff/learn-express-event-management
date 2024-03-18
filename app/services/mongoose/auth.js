@@ -1,12 +1,13 @@
 const Users = require('../../api/v1/users/model');
 const { BadRequestError, ForbiddenError } = require('../../errors');
-const createUserPayload = require('../../utils/createUserPayload');
+const { createUserPayload } = require('../../utils/createUserPayload');
 const { createJwt } = require('../../utils/jwt');
 
 const signin = async (req) => {
   const { email, password } = req.body;
 
-  if (!email || !password) throw new BadRequestError('Email and password are mandatory');
+  if (!email || !password)
+    throw new BadRequestError('Email and password are mandatory');
 
   const user = await Users.findOne({ email });
 

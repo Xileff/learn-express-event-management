@@ -9,4 +9,5 @@ module.exports = {
   jwtExpiration: process.env.JWT_EXPIRATION,
   emailAddress: process.env.EMAIL_ADDRESS,
   emailPassword: process.env.EMAIL_PASSWORD,
+  urlFrontEnd: process.env.URL_FRONTEND,
 };
