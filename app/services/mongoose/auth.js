@@ -19,7 +19,7 @@ const signin = async (req) => {
   }
 
   const token = createJwt({ payload: createUserPayload(user) });
-  return token;
+  return { token, role: user.role };
 };
 
 module.exports = { signin };

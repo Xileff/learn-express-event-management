@@ -16,9 +16,10 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(
       {
-        message: 'Unsupported file format. Picture must be either jpg, jpeg, or png',
+        message:
+          'Unsupported file format. Picture must be either jpg, jpeg, or png',
       },
-      false,
+      false
     );
   }
 };
@@ -26,7 +27,7 @@ const fileFilter = (req, file, cb) => {
 const uploadMiddleware = multer({
   storage,
   limits: {
-    fileSize: 3000000,
+    fileSize: 3145728,
   },
   fileFilter,
 });

@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const path = require('path');
 const config = require('./app/config');
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(
     optionsSuccessStatus: 200,
   })
 );
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 const v1 = '/api/v1';
 
