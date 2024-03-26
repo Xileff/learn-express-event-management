@@ -8,11 +8,11 @@ const getAllPayments = async (req) => {
   const result = await Payments.find(condition)
     .populate({
       path: 'image',
-      select: '_id name',
+      select: '_id url',
     })
     .select('_id type status image');
 
-    return result;
+  return result;
 };
 
 const createPayment = async (req) => {
@@ -42,10 +42,10 @@ const getOnePayment = async (req) => {
   })
     .populate({
       path: 'image',
-      select: '_id name',
+      select: '_id url',
     })
     .select('_id type status image');
-  
+
   if (!result) throw new NotFoundError(`Payment with id ${id} not found`);
 
   return result;
@@ -65,10 +65,10 @@ const updatePayment = async (req) => {
 
   if (check) throw new BadRequestError('Payment already exists.');
 
-  const  result = await Payments.findOneAndUpdate(
+  const result = await Payments.findOneAndUpdate(
     { _id: id },
     { type, image, organizer: req.user.organizer },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   );
 
   if (!result) throw new NotFoundError(`Payment with id ${id} not found.`);
