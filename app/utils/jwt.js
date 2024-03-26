@@ -3,7 +3,7 @@ const { jwtSecret, jwtExpiration } = require('../config');
 
 const createJwt = ({ payload }) => {
   const token = jwt.sign(payload, jwtSecret, {
-    expiresIn: jwtExpiration,
+    expiresIn: parseInt(jwtExpiration),
   });
   return token;
 };
